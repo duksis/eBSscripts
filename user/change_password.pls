@@ -15,6 +15,7 @@ v_newpassword varchar2(30) := '&password';
 BEGIN
 
   IF fnd_user_pkg.changepassword(upper(v_username), v_newpassword) THEN
+      COMMIT;
       dbms_output.put_line('SUCCESS || Users: '||upper(v_username)||' password set to: '||v_newpassword);
   ELSE
       dbms_output.put_line('ERROR || Users: '||upper(v_username)||' password was not set to: '||v_newpassword);
