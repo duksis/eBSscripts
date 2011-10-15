@@ -14,10 +14,11 @@ DECLARE
   v_description varchar2(100);
 
   CURSOR resp_cur (resp_param IN varchar2, user_param in varchar2) IS
-  SELECT res_vl.responsibility_name, res_vl.responsibility_key, app.application_short_name
+  SELECT res_vl.responsibility_name, res.responsibility_key, res_g.Security_Group_ID,
+    app.application_short_name, app.application_id, res.start_date, res.end_date, usr.user_id, res.responsibility_id
   FROM fnd_responsibility res, fnd_responsibility_vl res_vl, fnd_user usr,
-   fnd_user_resp_groups_all res_g, FND_APPLICATION app
-  WHERE app.application_id = res.application_id
+    fnd_user_resp_groups_all res_g, FND_APPLICATION app
+  WHERE app.application_id = res_g.responsibility_application_id
   AND res.responsibility_id = res_vl.responsibility_id
   AND res.responsibility_id = res_g.responsibility_id
   AND res_g.user_id = usr.user_id
