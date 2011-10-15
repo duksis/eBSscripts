@@ -38,7 +38,32 @@ BEGIN
                         ,resp_app       => resp_arr(resp_arr.LAST).application_short_name
                         ,resp_key       => resp_arr(resp_arr.LAST).responsibility_key
                         ,security_group => 'STANDARD');
-    dbms_output.put_line('= Responsibility: "'||resp_arr(resp_arr.LAST).responsibility_name||'" has been removed.');
+
+    DECLARE
+      v_dummy number;
+    BEGIN
+      select 1 into v_dummy
+      from fnd_responsibility res,
+        fnd_user usr,
+        fnd_user_resp_groups_all res_g
+      where 1 = 1
+      and res.responsibility_id = res_g.responsibility_id
+      and res_g.user_id = usr.user_id
+      and user_name = v_user_name
+      and res.responsibility_key = resp_arr(resp_arr.LAST).responsibility_key
+      and nvl(res.end_date,sysdate+1) > SYSDATE;
+
+      dbms_output.put_line('* '||v_user_name);
+      dbms_output.put_line('* '||resp_arr(resp_arr.LAST).start_date);
+      dbms_output.put_line('* '||resp_arr(resp_arr.LAST).end_Date);
+      dbms_output.put_line('* '||resp_arr(resp_arr.LAST).responsibility_key);
+      dbms_output.put_line('* '||resp_arr(resp_arr.LAST).application_short_name);
+      dbms_output.put_line('= !! Responsibility: "'||resp_arr(resp_arr.LAST).responsibility_name||'" was not removed. !!');
+    EXCEPTION
+      when no_data_found then
+        dbms_output.put_line('= Responsibility: "'||resp_arr(resp_arr.LAST).responsibility_name||'" has been removed.');
+        commit;
+    END;
   ELSIF resp_arr.LAST > 1 THEN
     dbms_output.put_line('= Multiple matching responsibilities have been found for string: '||v_responsibility);
     FOR i in resp_arr.FIRST..resp_arr.LAST LOOP
