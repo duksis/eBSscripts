@@ -17,4 +17,4 @@ and sysdate between res.start_date and nvl(res.end_date,sysdate)
 and user_name = upper('&Eneter_username')
 order by 1;
 /
-
+EXIT

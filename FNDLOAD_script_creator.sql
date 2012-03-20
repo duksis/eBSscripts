@@ -1,6 +1,8 @@
 /*
   Creates FNDLOAD string for downloading concurrent programms by specifying just the program full name
+  fnd load example by Anil Passi:    http://oracle.anilpassi.com/oracle-fndload-script-examples.html
 */
+
 accept Enter_cr_full_name prompt "Please enter concurrent program full name: "
 
 SELECT 'FNDLOAD '
